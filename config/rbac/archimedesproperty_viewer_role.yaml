@@ -1,0 +1,20 @@
+# permissions for end users to view archimedesproperties.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: archimedesproperty-viewer-role
+rules:
+- apiGroups:
+  - backwoods.backwoodsautomation.com
+  resources:
+  - archimedesproperties
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - backwoods.backwoodsautomation.com
+  resources:
+  - archimedesproperties/status
+  verbs:
+  - get

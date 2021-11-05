@@ -1,0 +1,16 @@
+domain: backwoodsautomation.com
+layout:
+- go.kubebuilder.io/v3
+projectName: archimedes
+repo: github.com/backwoodsautomation/archimedes
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: backwoodsautomation.com
+  group: backwoods
+  kind: ArchimedesProperty
+  path: github.com/backwoodsautomation/archimedes/api/v1
+  version: v1
+version: "3"

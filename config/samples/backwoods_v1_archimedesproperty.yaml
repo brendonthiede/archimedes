@@ -1,0 +1,6 @@
+apiVersion: backwoods.backwoodsautomation.com/v1
+kind: ArchimedesProperty
+metadata:
+  name: archimedesproperty-sample
+spec:
+  # TODO(user): Add fields here
