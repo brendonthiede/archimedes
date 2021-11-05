@@ -1,0 +1,34 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - backwoods.backwoodsautomation.com
+  resources:
+  - archimedesproperties
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - backwoods.backwoodsautomation.com
+  resources:
+  - archimedesproperties/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - backwoods.backwoodsautomation.com
+  resources:
+  - archimedesproperties/status
+  verbs:
+  - get
+  - patch
+  - update
