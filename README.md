@@ -1,2 +1,2 @@
 # archimedes
-A Kubernetes application properties tool.
+A Kubernetes container properties tool.

@@ -28,18 +28,34 @@ type ArchimedesPropertySpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of ArchimedesProperty. Edit archimedesproperty_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	//ConfigMapName is the name of the config map to be created
+	ConfigMapName string `json:"name,omitempty"`
+	//Repo is the application repo url
+	Repo string `json:"repo,omitempty"`
+	//Revision is the branch, commit hash or tag of the repo
+	Revision string `json:"revision,omitempty"`
+	//PropertiesPath is the path to the applications properties template
+	//example: config/properties.tpl
+	PropertiesPath string `json:"propertiesPath,omitempty"`
+	//SourceConfig is yaml containing data to be merged with the properties template
+	SourceConfig string `json:"sourceConfig,omitempty"`
 }
 
 // ArchimedesPropertyStatus defines the observed state of ArchimedesProperty
 type ArchimedesPropertyStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+
+// +kubebuilder:printcolumn:name="Succeeded",type=string,JSONPath=`.status.conditions[?(@.type=="ConfigmapCreated")].status`,description="Indicates if the ConfigMap was created/updated successfully"
+// +kubebuilder:printcolumn:name="Reason",type=string,JSONPath=`.status.conditions[?(@.type=="ConfigmapCreated")].reason`,description="Reason for the current status"
+// +kubebuilder:printcolumn:name="Message",type=string,JSONPath=`.status.conditions[?(@.type=="ConfigmapCreated")].message`,description="Message with more information, regarding the current status"
+// +kubebuilder:printcolumn:name="Last Transition",type=date,JSONPath=`.status.conditions[?(@.type=="ConfigmapCreated")].lastTransitionTime`,description="Time when the condition was updated the last time"
+// +kubebuilder:printcolumn:name="Age",type=date,JSONPath=`.metadata.creationTimestamp`,description="Time when this ConfigMap was created"
+// +kubebuilder:subresource:status
+
 
 // ArchimedesProperty is the Schema for the archimedesproperties API
 type ArchimedesProperty struct {
