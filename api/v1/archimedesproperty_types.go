@@ -25,13 +25,10 @@ import (
 
 // ArchimedesPropertySpec defines the desired state of ArchimedesProperty
 type ArchimedesPropertySpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	//ConfigMapName is the name of the config map to be created
 	ConfigMapName string `json:"name,omitempty"`
 	//Repo is the application repo url
-	Repo string `json:"repo,omitempty"`
+	RepoUrl string `json:"repoUrl,omitempty"`
 	//Revision is the branch, commit hash or tag of the repo
 	Revision string `json:"revision,omitempty"`
 	//PropertiesPath is the path to the applications properties template
@@ -39,6 +36,10 @@ type ArchimedesPropertySpec struct {
 	PropertiesPath string `json:"propertiesPath,omitempty"`
 	//SourceConfig is yaml containing data to be merged with the properties template
 	SourceConfig string `json:"sourceConfig,omitempty"`
+	//PropertyType the format you wish to store the merged results as (keys or file)
+	PropertyType string `json:"propertyType,omitempty"`
+	//KeyName is the name of the key used if the PropertyType is file
+	KeyName string `json:"KeyName,omitempty"`
 }
 
 // ArchimedesPropertyStatus defines the observed state of ArchimedesProperty

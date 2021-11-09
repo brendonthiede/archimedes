@@ -58,12 +58,20 @@ spec:
           spec:
             description: ArchimedesPropertySpec defines the desired state of ArchimedesProperty
             properties:
+              KeyName:
+                description: KeyName is the name of the key used if the PropertyType
+                  is file
+                type: string
               name:
                 description: ConfigMapName is the name of the config map to be created
                 type: string
               propertiesPath:
                 description: 'PropertiesPath is the path to the applications properties
                   template example: config/properties.tpl'
+                type: string
+              propertyType:
+                description: PropertyType the format you wish to store the merged
+                  results as (keys or file)
                 type: string
               repo:
                 description: Repo is the application repo url
