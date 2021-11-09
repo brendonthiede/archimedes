@@ -73,7 +73,7 @@ spec:
                 description: PropertyType the format you wish to store the merged
                   results as (keys or file)
                 type: string
-              repo:
+              repoUrl:
                 description: Repo is the application repo url
                 type: string
               revision:
