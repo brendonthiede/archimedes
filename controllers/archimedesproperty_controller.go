@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 	"time"
@@ -207,8 +208,13 @@ func (r *ArchimedesPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error 
 }
 
 func gitConfig(url, revision string) string {
-	dir := "/tmp/application"
-	err := os.RemoveAll(dir)
+	
+	dir, err := ioutil.TempDir("tmp", "archimedes")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.RemoveAll(dir)
+	
 	if err != nil {
 		fmt.Println(err)
 	}
