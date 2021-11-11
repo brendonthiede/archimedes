@@ -1,6 +1,6 @@
 ![Archimedes](./ArchimedesLogo.png)
 # Archimedes 
-Archimedes is a tool to help generate highly configurable configmaps to be consumed as properties apps running within the cluster.
+Archimedes is a Kubernetes Operator written to allow for separate repos to control merged configurations using a GitOps approach.
 
 ![Architecture](./arch.png)
 
