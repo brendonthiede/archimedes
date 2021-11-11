@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-11-11T15:38:04.139Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36" etag="q6tfUNaxkEOQ8Ve7eNG6" version="15.4.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-11-11T15:48:31.828Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36" etag="37QNMUNGirqRGCVRIncT" version="15.4.3" type="github">
   <diagram id="TfoaiBCire9xo3BsvuLZ" name="Page-1">
     <mxGraphModel dx="902" dy="745" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1200" math="0" shadow="0">
       <root>
@@ -14,16 +14,22 @@
           <mxGeometry x="330" y="130" width="200" height="80" as="geometry" />
         </mxCell>
         <mxCell id="aEQkKOPdxopITjA_2GJS-4" value="Archimedes Properties Operator" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="330" y="250" width="200" height="50" as="geometry" />
+          <mxGeometry x="330" y="330" width="200" height="50" as="geometry" />
         </mxCell>
         <mxCell id="aEQkKOPdxopITjA_2GJS-5" value="Kubernetes API" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="330" y="350" width="200" height="50" as="geometry" />
+          <mxGeometry x="330" y="430" width="200" height="50" as="geometry" />
         </mxCell>
         <mxCell id="aEQkKOPdxopITjA_2GJS-6" value="ConfigMaps" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="330" y="440" width="200" height="50" as="geometry" />
+          <mxGeometry x="330" y="520" width="200" height="50" as="geometry" />
         </mxCell>
         <mxCell id="aEQkKOPdxopITjA_2GJS-7" value="Platform&lt;br&gt;Repo" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="580" y="130" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="aEQkKOPdxopITjA_2GJS-9" value="(Optional)&lt;br&gt;Testing Pod for validation&lt;br&gt;prior to commit" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="330" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="aEQkKOPdxopITjA_2GJS-10" value="Archimedes Properties&lt;br&gt;Custom Resources" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="240" width="200" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
