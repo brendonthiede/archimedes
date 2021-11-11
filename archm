@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-11-11T16:10:57.623Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36" etag="Sq9rxxLnQXGaWir9bOTw" version="15.4.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-11-11T17:47:19.717Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36" etag="wgYpwq4jHOBBu29vSqU4" version="15.4.3" type="github">
   <diagram id="TfoaiBCire9xo3BsvuLZ" name="Page-1">
     <mxGraphModel dx="812" dy="688" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1200" math="0" shadow="0">
       <root>
@@ -19,7 +19,7 @@
         <mxCell id="aEQkKOPdxopITjA_2GJS-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="aEQkKOPdxopITjA_2GJS-3" target="aEQkKOPdxopITjA_2GJS-9" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="aEQkKOPdxopITjA_2GJS-3" value="Argo / Flux&lt;br&gt;Preferred GitOps Deployment&lt;br&gt;Tools&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="aEQkKOPdxopITjA_2GJS-3" value="&lt;br&gt;&lt;br&gt;Argo / Flux&lt;br&gt;Preferred GitOps Deployment&lt;br&gt;Tools&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="330" y="130" width="200" height="80" as="geometry" />
         </mxCell>
         <mxCell id="aEQkKOPdxopITjA_2GJS-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" parent="1" source="aEQkKOPdxopITjA_2GJS-4" target="aEQkKOPdxopITjA_2GJS-10" edge="1">
