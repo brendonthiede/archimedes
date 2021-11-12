@@ -1,4 +1,4 @@
-module github.com/backwoodsautomation/archimedes
+module github.com/backwoods-devops/archimedes
 
 go 1.16
 

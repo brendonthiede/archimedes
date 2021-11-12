@@ -37,7 +37,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	backwoodsv1 "github.com/backwoodsautomation/archimedes/api/v1"
+	backwoodsv1 "github.com/backwoods-devops/archimedes/api/v1"
 	git "github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/transport/http"
@@ -61,9 +61,9 @@ type ArchimedesPropertyReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=backwoods.backwoodsautomation.com,resources=archimedesproperties,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=backwoods.backwoodsautomation.com,resources=archimedesproperties/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=backwoods.backwoodsautomation.com,resources=archimedesproperties/finalizers,verbs=update
+//+kubebuilder:rbac:groups=backwoods.backwoods-devops.io,resources=archimedesproperties,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=backwoods.backwoods-devops.io,resources=archimedesproperties/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=backwoods.backwoods-devops.io,resources=archimedesproperties/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -208,13 +208,13 @@ func (r *ArchimedesPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error 
 }
 
 func gitConfig(url, revision string) string {
-	
+
 	dir, err := ioutil.TempDir("tmp", "archimedes")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer os.RemoveAll(dir)
-	
+
 	if err != nil {
 		fmt.Println(err)
 	}

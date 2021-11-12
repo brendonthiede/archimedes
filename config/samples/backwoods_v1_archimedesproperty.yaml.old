@@ -1,4 +1,4 @@
-apiVersion: backwoods.backwoodsautomation.com/v1
+apiVersion: backwoods.backwoods-devops.io/v1
 kind: ArchimedesProperty
 metadata:
   name: archimedesproperty-sample

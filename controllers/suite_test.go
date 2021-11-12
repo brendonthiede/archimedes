@@ -30,7 +30,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	backwoodsv1 "github.com/backwoodsautomation/archimedes/api/v1"
+	backwoodsv1 "github.com/backwoods-devops/archimedes/api/v1"
 	//+kubebuilder:scaffold:imports
 )
 

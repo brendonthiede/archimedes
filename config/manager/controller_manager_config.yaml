@@ -8,4 +8,4 @@ webhook:
   port: 9443
 leaderElection:
   leaderElect: true
-  resourceName: 92bf8abc.backwoodsautomation.com
+  resourceName: 92bf8abc.backwoods-devops.io
