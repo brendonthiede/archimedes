@@ -25,3 +25,5 @@ COPY --from=builder /workspace/manager .
 USER 65532:65532
 
 ENTRYPOINT ["/manager"]
+
+LABEL org.opencontainers.image.source https://github.com/backwoods-devops/archimedes
