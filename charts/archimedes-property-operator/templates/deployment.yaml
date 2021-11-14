@@ -3,6 +3,109 @@ kind: Deployment
 metadata:
   name: {{ include "archimedes-property-operator.fullname" . }}
   labels:
+{{ include "archimedes-property-operator.labels" . | indent 4 }}
+  {{- if .Values.podAnnotations }}
+  annotations:
+{{ include "archimedes-property-operator.annotations" . | indent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  {{- with .Values.deploymentStrategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+{{ include "archimedes-property-operator.matchLabels" . | indent 6 }}
+  template:
+    metadata:
+      labels:
+{{ include "archimedes-property-operator.labels" . | indent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+{{ include "archimedes-property-operator.annotations" . | indent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ template "archimedes-property-operator.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /manager
+          args:
+            - -leader-elect
+          env:
+            - name: WATCH_NAMESPACE
+            {{- if .Values.archimedes.namespaces }}
+              value: {{ .Values.archimedes.namespaces | quote }}
+            {{- else if .Values.rbac.namespaced }}
+              value: {{ .Release.Namespace | quote }}
+            {{- else }}
+              value: ""
+            {{- end }}
+            
+            {{- with .Values.environmentVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http-metrics
+              containerPort: 8080
+              protocol: TCP
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          {{- with .Values.image.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- include "archimedes-property-operator.additionalContainers" . | nindent 8 }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "archimedes-property-operator.fullname" . }}
+  labels:
     {{- include "archimedes-property-operator.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}

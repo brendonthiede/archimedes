@@ -75,9 +75,8 @@ type ArchimedesPropertyReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
 func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := r.Log.WithValues("archimedesproperty", req.NamespacedName)
-	log.Info("Starting Reconcile func")
 
+	log := r.Log.WithValues("archimedesproperty", req.NamespacedName)
 	instance := &backwoodsv1.ArchimedesProperty{}
 
 	err := r.Get(ctx, req.NamespacedName, instance)
@@ -97,11 +96,7 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 		log.Error(err, "Could not find property template in application repo")
 	}
 	t := template.Must(template.New("properties").Parse(string(props)))
-	//mock data for testing should already be passed with instance from helm chart creating roos property k8s resource
-	// yamlFile, err := ioutil.ReadFile("./config/samples/cluster-global.yaml")
-	// if err != nil {
-	//  log.Error(err, "Could not load sample cluster-global data")
-	// }
+	
 	clusterGlobalInput := instance.Spec.SourceConfig
 	log.Info(string(props))
 	cg := map[string]interface{}{}
@@ -209,7 +204,7 @@ func (r *ArchimedesPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error 
 
 func gitConfig(url, revision string) string {
 
-	dir, err := ioutil.TempDir("tmp", "archimedes")
+	/* dir, err := ioutil.TempDir("tmp", "archimedes")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -218,12 +213,15 @@ func gitConfig(url, revision string) string {
 	if err != nil {
 		fmt.Println(err)
 	}
+    //Setup different login options and skip cert if not present 
 	user := os.Getenv("USER")
 	pass := os.Getenv("PASS")
-	certs, err := ioutil.ReadFile("/etc/archimedes-property-operator/ca.crt")
-	if err != nil {
-		fmt.Println(err)
-	}
+    var certs []byte
+	//TODO check if exists first
+	//certs, err = ioutil.ReadFile("/etc/archimedes-property-operator/ca.crt")
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 	r, err := git.PlainClone(dir, false, &git.CloneOptions{
 		URL: url,
 		Auth: &http.BasicAuth{
@@ -242,6 +240,7 @@ func gitConfig(url, revision string) string {
 	if err != nil {
 		fmt.Println(err)
 	}
-	commit, err := r.CommitObject(ref.Hash())
-	return commit.Hash.String()
+	commit, err := r.CommitObject(ref.Hash()) */
+	//return commit.Hash.String()
+	return "COMMITHASH"
 }

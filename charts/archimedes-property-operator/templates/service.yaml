@@ -3,13 +3,18 @@ kind: Service
 metadata:
   name: {{ include "archimedes-property-operator.fullname" . }}
   labels:
-    {{- include "archimedes-property-operator.labels" . | nindent 4 }}
+    {{ include "archimedes-property-operator.labels" . | indent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
+    - port: 8080
+      targetPort: http-metrics
+      protocol: TCP
+      name: http-metrics
+    - port: 8081
       targetPort: http
       protocol: TCP
       name: http
   selector:
-    {{- include "archimedes-property-operator.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "archimedes-property-operator.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

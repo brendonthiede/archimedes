@@ -1,0 +1,74 @@
+{{ if and .Values.rbac.create .Values.rbac.createrole }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind:  {{ if not .Values.rbac.namespaced -}} Cluster {{- end -}} Role
+metadata:
+  name: archimedes-property-operator
+  labels:
+{{ include "archimedes-property-operator.labels" . | indent 4 }}
+rules:
+- apiGroups:
+  - coordination.k8s.io
+  - ""
+  resources:
+  - configmaps
+  - leases
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - backwoods.backwoods-devops.io
+  resources:
+  - archimedes-property
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - backwoods.backwoods-devops.io
+  resources:
+  - archimedes-property/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - backwoods.backwoods-devops.io
+  resources:
+  - archimedes-property/status
+  verbs:
+  - get
+  - patch
+  - update
+{{ end }}
