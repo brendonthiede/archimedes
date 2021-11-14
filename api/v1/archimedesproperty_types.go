@@ -56,7 +56,7 @@ type ArchimedesPropertyStatus struct {
 // +kubebuilder:printcolumn:name="Message",type=string,JSONPath=`.status.conditions[?(@.type=="ConfigmapCreated")].message`,description="Message with more information, regarding the current status"
 // +kubebuilder:printcolumn:name="Last Transition",type=date,JSONPath=`.status.conditions[?(@.type=="ConfigmapCreated")].lastTransitionTime`,description="Time when the condition was updated the last time"
 // +kubebuilder:printcolumn:name="Age",type=date,JSONPath=`.metadata.creationTimestamp`,description="Time when this ConfigMap was created"
-// +kubebuilder:subresource:statu
+// +kubebuilder:subresource:status
 type ArchimedesProperty struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

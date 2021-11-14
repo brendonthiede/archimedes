@@ -5,7 +5,7 @@ metadata:
   name: archimedesproperty-viewer-role
 rules:
 - apiGroups:
-  - backwoods.backwoods-devops.io
+  - archimedes.backwoods-devops.io
   resources:
   - archimedesproperties
   verbs:
@@ -13,7 +13,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - backwoods.backwoods-devops.io
+  - archimedes.backwoods-devops.io
   resources:
   - archimedesproperties/status
   verbs:

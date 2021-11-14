@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
-  name: archimedesproperties.backwoods.backwoods-devops.io
+  name: archimedesproperties.archimedes.backwoods-devops.io
 spec:
-  group: backwoods.backwoods-devops.io
+  group: archimedes.backwoods-devops.io
   names:
     kind: ArchimedesProperty
     listKind: ArchimedesPropertyList

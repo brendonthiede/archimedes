@@ -23,8 +23,9 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
-	"log"
-	"os"
+
+	//"log"
+	//"os"
 	"strings"
 	"time"
 
@@ -38,9 +39,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	backwoodsv1 "github.com/backwoods-devops/archimedes/api/v1"
-	git "github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/transport/http"
+	//git "github.com/go-git/go-git/v5"
+	//"github.com/go-git/go-git/v5/plumbing"
+	//"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-logr/logr"
 )
 
@@ -61,9 +62,9 @@ type ArchimedesPropertyReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=backwoods.backwoods-devops.io,resources=archimedesproperties,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=backwoods.backwoods-devops.io,resources=archimedesproperties/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=backwoods.backwoods-devops.io,resources=archimedesproperties/finalizers,verbs=update
+//+kubebuilder:rbac:groups=archimedes.backwoods-devops.io,resources=archimedesproperties,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=archimedes.backwoods-devops.io,resources=archimedesproperties/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=archimedes.backwoods-devops.io,resources=archimedesproperties/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -96,7 +97,7 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 		log.Error(err, "Could not find property template in application repo")
 	}
 	t := template.Must(template.New("properties").Parse(string(props)))
-	
+
 	clusterGlobalInput := instance.Spec.SourceConfig
 	log.Info(string(props))
 	cg := map[string]interface{}{}
@@ -205,42 +206,42 @@ func (r *ArchimedesPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error 
 func gitConfig(url, revision string) string {
 
 	/* dir, err := ioutil.TempDir("tmp", "archimedes")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer os.RemoveAll(dir)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer os.RemoveAll(dir)
 
-	if err != nil {
-		fmt.Println(err)
-	}
-    //Setup different login options and skip cert if not present 
-	user := os.Getenv("USER")
-	pass := os.Getenv("PASS")
-    var certs []byte
-	//TODO check if exists first
-	//certs, err = ioutil.ReadFile("/etc/archimedes-property-operator/ca.crt")
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	r, err := git.PlainClone(dir, false, &git.CloneOptions{
-		URL: url,
-		Auth: &http.BasicAuth{
-			Username: user,
-			Password: pass,
-		},
-		ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", revision)),
-		SingleBranch:      true,
-		RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
-		CABundle:          certs,
-	})
-	if err != nil {
-		fmt.Println(err)
-	}
-	ref, err := r.Head()
-	if err != nil {
-		fmt.Println(err)
-	}
-	commit, err := r.CommitObject(ref.Hash()) */
+		if err != nil {
+			fmt.Println(err)
+		}
+	    //Setup different login options and skip cert if not present
+		user := os.Getenv("USER")
+		pass := os.Getenv("PASS")
+	    var certs []byte
+		//TODO check if exists first
+		//certs, err = ioutil.ReadFile("/etc/archimedes-property-operator/ca.crt")
+		//if err != nil {
+		//	fmt.Println(err)
+		//}
+		r, err := git.PlainClone(dir, false, &git.CloneOptions{
+			URL: url,
+			Auth: &http.BasicAuth{
+				Username: user,
+				Password: pass,
+			},
+			ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", revision)),
+			SingleBranch:      true,
+			RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+			CABundle:          certs,
+		})
+		if err != nil {
+			fmt.Println(err)
+		}
+		ref, err := r.Head()
+		if err != nil {
+			fmt.Println(err)
+		}
+		commit, err := r.CommitObject(ref.Hash()) */
 	//return commit.Hash.String()
 	return "COMMITHASH"
 }

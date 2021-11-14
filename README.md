@@ -10,7 +10,7 @@ Archimedes is designed to solve configuration issues that become difficult when 
 ## ArchimedesProperty
 
 ```
-apiVersion: backwoods.backwoods-devops.io/v1
+apiVersion: archimedes.backwoods-devops.io/v1
 kind: ArchimedesProperty
 metadata:
   name: archimedesproperty-sample

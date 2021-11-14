@@ -40,7 +40,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - backwoods.backwoods-devops.io
+  - archimedes.backwoods-devops.io
   resources:
   - archimedes-property
   verbs:
@@ -52,7 +52,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - backwoods.backwoods-devops.io
+  - archimedes.backwoods-devops.io
   resources:
   - archimedes-property/finalizers
   verbs:
@@ -64,7 +64,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - backwoods.backwoods-devops.io
+  - archimedes.backwoods-devops.io
   resources:
   - archimedes-property/status
   verbs:
