@@ -1,13 +1,13 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/backwoods-devops/archimedes
+  repository: ghcr.io/backwoods-devops/archimedes/archimedes-controller
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: 0.1.0
   volumeMounts: []
     # - name: ca
-        mountPath: "/etc/archimedea-property-operator"
+    #   mountPath: "/etc/archimedea-property-operator"
 
 volumes: []
   # - name: ca
@@ -18,7 +18,8 @@ volumes: []
   #         path: ca.pem
 
 
-imagePullSecrets: []
+imagePullSecrets: 
+- name: regcred
 nameOverride: ""
 fullnameOverride: ""
 
@@ -46,7 +47,7 @@ securityContext: {}
 
 environmentVars: []
 
-vault:
+archimedes:
   address: ""
   authMethod: token
   tokenPath: ""
@@ -75,6 +76,13 @@ serviceMonitor:
   honorLabels: true
   relabelings: []
 
+tests:
+  # imagePullSecrets:
+  # - imagePullSecret
+  busybox:
+    image:
+      repository: busybox
+      tag: latest
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -93,3 +101,9 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Additional labels for the archimedes-property-operator-test-connection pod
+testPodLabels: {}
+
+# Annotations for the archimedes-property-operator-test-connection pod
+testPodAnnotations: {}

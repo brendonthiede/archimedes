@@ -51,6 +51,42 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Additional pod annotations
+*/}}
+{{- define "archimedes-property-operator.annotations" -}}
+{{- if .Values.podAnnotations }}
+{{- toYaml .Values.podAnnotations }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Additional test-connection pod annotations
+*/}}
+{{- define "archimedes-property-operator.testPodAnnotations" -}}
+{{- if .Values.testPodAnnotations }}
+{{- toYaml .Values.testPodAnnotations }}
+{{- end }}
+{{- end }}
+
+{{/*
+Additional test-connection pod labels
+*/}}
+{{- define "archimedes-property-operator.testPodLabels" -}}
+{{- if .Values.testPodLabels }}
+{{- toYaml .Values.testPodLabels }}
+{{- end }}
+{{- end }}
+
+{{/*
+matchLabels
+*/}}
+{{- define "archimedes-property-operator.matchLabels" -}}
+app.kubernetes.io/name: {{ include "archimedes-property-operator.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "archimedes-property-operator.serviceAccountName" -}}
@@ -60,3 +96,9 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Additional containers to add to the deployment
+*/}}
+{{- define "archimedes-property-operator.additionalContainers" -}}
+{{- end -}}

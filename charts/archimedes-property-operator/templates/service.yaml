@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "archimedes-property-operator.fullname" . }}
   labels:
-    {{ include "archimedes-property-operator.labels" . | indent 4 }}
+{{ include "archimedes-property-operator.labels" . | indent 4 }}
 spec:
   type: ClusterIP
   ports:
