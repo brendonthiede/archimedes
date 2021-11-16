@@ -40,9 +40,9 @@ rules:
   - update
   - watch
 - apiGroups:
-  - archimedes.backwoods-devops.io
+  - backwoods-devops.io
   resources:
-  - archimedes-property
+  - archimedesproperties
   verbs:
   - create
   - delete
@@ -52,9 +52,9 @@ rules:
   - update
   - watch
 - apiGroups:
-  - archimedes.backwoods-devops.io
+  - backwoods-devops.io
   resources:
-  - archimedes-property/finalizers
+  - archimedesproperties/finalizers
   verbs:
   - create
   - delete
@@ -64,9 +64,9 @@ rules:
   - update
   - watch
 - apiGroups:
-  - archimedes.backwoods-devops.io
+  - backwoods-devops.io
   resources:
-  - archimedes-property/status
+  - archimedesproperties/status
   verbs:
   - get
   - patch

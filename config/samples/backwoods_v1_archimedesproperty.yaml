@@ -1,0 +1,15 @@
+apiVersion: archimedes.backwoods-devops.io/v1
+kind: ArchimedesProperty
+metadata:
+  name: archimedesproperty-sample
+spec:
+  name: ap
+  repoUrl: "https://github.com/backwoods-devops/archimedes.git"
+  revision: main
+  propertiesPath: config/samples/properties.tpl
+  sourceConfig: |
+    env:
+      name: staging
+      dbname: staging-widgets
+  propertyType: kvp
+  #keyName:

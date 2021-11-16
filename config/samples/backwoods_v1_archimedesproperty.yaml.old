@@ -1,6 +1,0 @@
-apiVersion: archimedes.backwoods-devops.io/v1
-kind: ArchimedesProperty
-metadata:
-  name: archimedesproperty-sample
-spec:
-  # TODO(user): Add fields here
