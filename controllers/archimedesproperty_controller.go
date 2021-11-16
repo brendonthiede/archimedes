@@ -24,8 +24,8 @@ import (
 	"html/template"
 	"io/ioutil"
 
-	//"log"
-	//"os"
+	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -39,9 +39,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	backwoodsv1 "github.com/backwoods-devops/archimedes/api/v1"
-	//git "github.com/go-git/go-git/v5"
-	//"github.com/go-git/go-git/v5/plumbing"
-	//"github.com/go-git/go-git/v5/plumbing/transport/http"
+	git "github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-logr/logr"
 )
 
@@ -76,7 +76,7 @@ type ArchimedesPropertyReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
 func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-
+    fmt.Println("Starting Reconcile Function!!!")
 	log := r.Log.WithValues("archimedesproperty", req.NamespacedName)
 	instance := &backwoodsv1.ArchimedesProperty{}
 
@@ -92,7 +92,7 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 		return ctrl.Result{}, err
 	}
 	commit := gitConfig(instance.Spec.RepoUrl, instance.Spec.Revision)
-	props, err := ioutil.ReadFile("/tmp/application/" + instance.Spec.PropertiesPath)
+	props, err := ioutil.ReadFile("/tmp/archimedes/" + instance.Spec.PropertiesPath)
 	if err != nil {
 		log.Error(err, "Could not find property template in application repo")
 	}
@@ -205,7 +205,7 @@ func (r *ArchimedesPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error 
 
 func gitConfig(url, revision string) string {
 
-	/* dir, err := ioutil.TempDir("tmp", "archimedes")
+	 dir, err := ioutil.TempDir("tmp", "archimedes")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -219,6 +219,7 @@ func gitConfig(url, revision string) string {
 		pass := os.Getenv("PASS")
 	    var certs []byte
 		//TODO check if exists first
+
 		//certs, err = ioutil.ReadFile("/etc/archimedes-property-operator/ca.crt")
 		//if err != nil {
 		//	fmt.Println(err)
@@ -232,7 +233,7 @@ func gitConfig(url, revision string) string {
 			ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", revision)),
 			SingleBranch:      true,
 			RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
-			CABundle:          certs,
+			//CABundle:          certs,
 		})
 		if err != nil {
 			fmt.Println(err)
@@ -241,7 +242,7 @@ func gitConfig(url, revision string) string {
 		if err != nil {
 			fmt.Println(err)
 		}
-		commit, err := r.CommitObject(ref.Hash()) */
-	//return commit.Hash.String()
-	return "COMMITHASH"
+		commit, err := r.CommitObject(ref.Hash()) 
+	return commit.Hash.String()
+	
 }
