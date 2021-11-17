@@ -81,8 +81,9 @@ type ArchimedesPropertyReconciler struct {
 func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 
 	fmt.Println("Starting Reconcile Function!!!")
+	fmt.Println(req.NamespacedName)
 	log := r.Log.WithValues("archimedesproperty", req.NamespacedName)
-
+	fmt.Println("Next Step!!!")
 	instance := &backwoodsv1.ArchimedesProperty{}
 
 	err := r.Get(ctx, req.NamespacedName, instance)
