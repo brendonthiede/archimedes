@@ -17,19 +17,19 @@ limitations under the License.
 package controllers
 
 import (
-	"bufio"
-	"bytes"
+	//"bufio"
+	//"bytes"
 	"context"
 	"fmt"
-	"html/template"
+	//"html/template"
 	"io/ioutil"
 
 	"log"
 	"os"
-	"strings"
+	//"strings"
 	"time"
 
-	"gopkg.in/yaml.v2"
+	//"gopkg.in/yaml.v2"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -65,6 +65,9 @@ type ArchimedesPropertyReconciler struct {
 //+kubebuilder:rbac:groups=archimedes.backwoods-devops.io,resources=archimedesproperties,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=archimedes.backwoods-devops.io,resources=archimedesproperties/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=archimedes.backwoods-devops.io,resources=archimedesproperties/finalizers,verbs=update
+//+kubebuilder:rbac:groups=core,resources=secrets,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=core;coordination.k8s.io,resources=configmaps;leases,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=core,resources=events,verbs=create;patch
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -76,8 +79,10 @@ type ArchimedesPropertyReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
 func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-    fmt.Println("Starting Reconcile Function!!!")
+
+	fmt.Println("Starting Reconcile Function!!!")
 	log := r.Log.WithValues("archimedesproperty", req.NamespacedName)
+
 	instance := &backwoodsv1.ArchimedesProperty{}
 
 	err := r.Get(ctx, req.NamespacedName, instance)
@@ -91,34 +96,37 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 		// Error reading the object - requeue the request.
 		return ctrl.Result{}, err
 	}
-	commit := gitConfig(instance.Spec.RepoUrl, instance.Spec.Revision)
-	props, err := ioutil.ReadFile("/tmp/archimedes/" + instance.Spec.PropertiesPath)
-	if err != nil {
-		log.Error(err, "Could not find property template in application repo")
-	}
-	t := template.Must(template.New("properties").Parse(string(props)))
+	/*
+		commit := gitConfig(instance.Spec.RepoUrl, instance.Spec.Revision)
+		props, err := ioutil.ReadFile("/tmp/archimedes/" + instance.Spec.PropertiesPath)
+		if err != nil {
+			log.Error(err, "Could not find property template in application repo")
+		}
+		t := template.Must(template.New("properties").Parse(string(props)))
 
-	clusterGlobalInput := instance.Spec.SourceConfig
-	log.Info(string(props))
-	cg := map[string]interface{}{}
-	err = yaml.Unmarshal([]byte(clusterGlobalInput), &cg)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Source-Config: ")
-	fmt.Println(cg)
-	var tpl bytes.Buffer
-	t.Execute(&tpl, cg)
+		clusterGlobalInput := instance.Spec.SourceConfig
+		log.Info(string(props))
+		cg := map[string]interface{}{}
+		err = yaml.Unmarshal([]byte(clusterGlobalInput), &cg)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Source-Config: ")
+		fmt.Println(cg)
+		var tpl bytes.Buffer
+		t.Execute(&tpl, cg)
+	*/
 	var data = make(map[string]string)
-	data["commit"] = commit
+	data["commit"] = "123"
 	data["repoUrl"] = instance.Spec.RepoUrl
 	data["revision"] = instance.Spec.Revision
 	data["path"] = instance.Spec.PropertiesPath
-	scanner := bufio.NewScanner(strings.NewReader(strings.TrimSpace(tpl.String())))
-	for scanner.Scan() {
-		s := strings.Split(scanner.Text(), "=")
-		data[s[0]] = s[1]
-	}
+
+	//scanner := bufio.NewScanner(strings.NewReader(strings.TrimSpace(tpl.String())))
+	//for scanner.Scan() {
+	//	s := strings.Split(scanner.Text(), "=")
+	//	data[s[0]] = s[1]
+	//}
 	configmap, err := newConfigMap(instance, data)
 	if err != nil {
 		// Error while creating the Kubernetes configmap - requeue the request.
@@ -205,44 +213,44 @@ func (r *ArchimedesPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error 
 
 func gitConfig(url, revision string) string {
 
-	 dir, err := ioutil.TempDir("tmp", "archimedes")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer os.RemoveAll(dir)
+	dir, err := ioutil.TempDir("tmp", "archimedes")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.RemoveAll(dir)
 
-		if err != nil {
-			fmt.Println(err)
-		}
-	    //Setup different login options and skip cert if not present
-		user := os.Getenv("USER")
-		pass := os.Getenv("PASS")
-	    var certs []byte
-		//TODO check if exists first
+	if err != nil {
+		fmt.Println(err)
+	}
+	//Setup different login options and skip cert if not present
+	user := os.Getenv("USER")
+	pass := os.Getenv("PASS")
+	//var certs []byte
+	//TODO check if exists first
 
-		//certs, err = ioutil.ReadFile("/etc/archimedes-property-operator/ca.crt")
-		//if err != nil {
-		//	fmt.Println(err)
-		//}
-		r, err := git.PlainClone(dir, false, &git.CloneOptions{
-			URL: url,
-			Auth: &http.BasicAuth{
-				Username: user,
-				Password: pass,
-			},
-			ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", revision)),
-			SingleBranch:      true,
-			RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
-			//CABundle:          certs,
-		})
-		if err != nil {
-			fmt.Println(err)
-		}
-		ref, err := r.Head()
-		if err != nil {
-			fmt.Println(err)
-		}
-		commit, err := r.CommitObject(ref.Hash()) 
+	//certs, err = ioutil.ReadFile("/etc/archimedes-property-operator/ca.crt")
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	r, err := git.PlainClone(dir, false, &git.CloneOptions{
+		URL: url,
+		Auth: &http.BasicAuth{
+			Username: user,
+			Password: pass,
+		},
+		ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", revision)),
+		SingleBranch:      true,
+		RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+		//CABundle:          certs,
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+	ref, err := r.Head()
+	if err != nil {
+		fmt.Println(err)
+	}
+	commit, err := r.CommitObject(ref.Hash())
 	return commit.Hash.String()
-	
+
 }

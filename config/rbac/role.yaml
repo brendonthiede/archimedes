@@ -32,3 +32,36 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - coordination.k8s.io
+  - ""
+  resources:
+  - configmaps
+  - leases
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch

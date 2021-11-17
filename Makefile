@@ -69,6 +69,14 @@ build: generate fmt vet ## Build manager binary.
 run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./main.go
 
+.PHONY: run-delve
+# Run with Delve for development purposes against the configured Kubernetes cluster in ~/.kube/config
+# Delve is a debugger for the Go programming language. More info: https://github.com/go-delve/delve
+run-delve: generate fmt vet manifests
+    go build -gcflags "all=-trimpath=$(shell go env GOPATH)" -o bin/manager main.go
+    dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient exec ./bin/manager
+
+
 .PHONY: docker-build
 docker-build: test ## Build docker image with the manager.
 	docker build -t ${IMG} .
