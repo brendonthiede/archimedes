@@ -1,2 +1,2 @@
-appname=Widget Smasher
+appname=Tree Finder
 dbname={{ .env.dbname }}

@@ -10,6 +10,6 @@ spec:
   sourceConfig: |
     env:
       name: staging
-      dbname: staging-widgets
+      dbname: forest-data
   propertyType: key
   keyName: applicaiton-properties
