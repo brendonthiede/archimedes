@@ -11,5 +11,5 @@ spec:
     env:
       name: staging
       dbname: staging-widgets
-  propertyType: kvp
-  #keyName:
+  propertyType: key
+  keyName: applicaiton-properties

@@ -56,7 +56,7 @@ spec:
           spec:
             description: ArchimedesPropertySpec defines the desired state of ArchimedesProperty
             properties:
-              KeyName:
+              keyName:
                 description: KeyName is the name of the key used if the PropertyType
                   is file
                 type: string

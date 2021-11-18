@@ -39,7 +39,7 @@ type ArchimedesPropertySpec struct {
 	//PropertyType the format you wish to store the merged results as (keys or file)
 	PropertyType string `json:"propertyType,omitempty"`
 	//KeyName is the name of the key used if the PropertyType is file
-	KeyName string `json:"KeyName,omitempty"`
+	KeyName string `json:"keyName,omitempty"`
 }
 
 // ArchimedesPropertyStatus defines the observed state of ArchimedesProperty

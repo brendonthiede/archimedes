@@ -21,24 +21,25 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"html/template"
+	"io/ioutil"
+	"os"
+	"strings"
+	"time"
+
 	backwoodsv1 "github.com/backwoods-devops/archimedes/api/v1"
 	git "github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-logr/logr"
 	"gopkg.in/yaml.v2"
-	"html/template"
-	"io/ioutil"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"os"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"strings"
-	"time"
 )
 
 const (
@@ -117,26 +118,26 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 	data["revision"] = instance.Spec.Revision
 	data["path"] = instance.Spec.PropertiesPath
 
-	scanner := bufio.NewScanner(strings.NewReader(strings.TrimSpace(tpl.String())))
-	for scanner.Scan() {
-		s := strings.Split(scanner.Text(), "=")
-		switch pt := instance.Spec.PropertyType; pt {
-		case "kvp":
-		  data[s[0]] = s[1]
-		case "key":
-		  if instance.Spec.KeyName != "" {
-			data[instance.Spec.KeyName] = s[1]
-		  }	else {
-			err := errors.NewBadRequest("Missing keyName")
-			log.Error(err,"Could not create Kubernetes configmap")	
-		  }
-		default:
-			err := errors.NewBadRequest("Invalid PropertyType")
-			log.Error(err,"Valid types (kvp, key).")	
+	switch pt := instance.Spec.PropertyType; pt {
+	case "kvp":
+		scanner := bufio.NewScanner(strings.NewReader(strings.TrimSpace(tpl.String())))
+		for scanner.Scan() {
+			s := strings.Split(scanner.Text(), "=")
+			data[s[0]] = s[1]
 		}
+	case "key":
+		if instance.Spec.KeyName != "" {
+			data[instance.Spec.KeyName] = strings.TrimSpace(tpl.String())
+		} else {
+			err := errors.NewBadRequest("Missing keyName")
+			log.Error(err, "Could not create Kubernetes configmap")
+		}
+	default:
+		err := errors.NewBadRequest("Invalid PropertyType")
+		log.Error(err, "Valid types (kvp, key).")
 	}
 
-	configmap, err := newConfigMap(instance, data,)
+	configmap, err := newConfigMap(instance, data)
 	if err != nil {
 		// Error while creating the Kubernetes configmap - requeue the request.
 		log.Error(err, "Could not create Kubernetes configmap")
@@ -187,7 +188,7 @@ func newConfigMap(r *backwoodsv1.ArchimedesProperty, data map[string]string) (*c
 	for k, v := range r.ObjectMeta.Annotations {
 		annotations[k] = v
 	}
-	
+
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        r.Name,
