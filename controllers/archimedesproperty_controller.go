@@ -120,9 +120,23 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 	scanner := bufio.NewScanner(strings.NewReader(strings.TrimSpace(tpl.String())))
 	for scanner.Scan() {
 		s := strings.Split(scanner.Text(), "=")
-		data[s[0]] = s[1]
+		switch pt := instance.Spec.PropertyType; pt {
+		case "kvp":
+		  data[s[0]] = s[1]
+		case "key":
+		  if instance.Spec.KeyName != "" {
+			data[instance.Spec.KeyName] = s[1]
+		  }	else {
+			err := errors.NewBadRequest("Missing keyName")
+			log.Error(err,"Could not create Kubernetes configmap")	
+		  }
+		default:
+			err := errors.NewBadRequest("Invalid PropertyType")
+			log.Error(err,"Valid types (kvp, key).")	
+		}
 	}
-	configmap, err := newConfigMap(instance, data)
+
+	configmap, err := newConfigMap(instance, data,)
 	if err != nil {
 		// Error while creating the Kubernetes configmap - requeue the request.
 		log.Error(err, "Could not create Kubernetes configmap")
@@ -173,6 +187,7 @@ func newConfigMap(r *backwoodsv1.ArchimedesProperty, data map[string]string) (*c
 	for k, v := range r.ObjectMeta.Annotations {
 		annotations[k] = v
 	}
+	
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        r.Name,
