@@ -44,12 +44,11 @@ import (
 
 const (
 	conditionTypeConfigmapCreated = "ConfigmapCreated"
-	//conditionReasonFetchFailed  = "FetchFailed"
-	conditionReasonCreated      = "Created"
-	conditionReasonCreateFailed = "CreateFailed"
-	conditionReasonUpdated      = "Updated"
-	conditionReasonUpdateFailed = "UpdateFailed"
-	conditionReasonMergeFailed  = "MergeFailed"
+	conditionReasonCreated        = "Created"
+	conditionReasonCreateFailed   = "CreateFailed"
+	conditionReasonUpdated        = "Updated"
+	conditionReasonUpdateFailed   = "UpdateFailed"
+	conditionReasonMergeFailed    = "MergeFailed"
 )
 
 // ArchimedesPropertyReconciler reconciles a ArchimedesProperty object
@@ -66,15 +65,7 @@ type ArchimedesPropertyReconciler struct {
 //+kubebuilder:rbac:groups=core;coordination.k8s.io,resources=configmaps;leases,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=core,resources=events,verbs=create;patch
 
-// Reconcile is part of the main kubernetes reconciliation loop which aims to
-// move the current state of the cluster closer to the desired state.
-// TODO(user): Modify the Reconcile function to compare the state specified by
-// the ArchimedesProperty object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
-//
-// For more details, check Reconcile and its Result here:
-// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
+//Reconcile is part of the main kubernetes reconciliation loop
 func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 
 	log := r.Log.WithValues("archimedesproperty", req.NamespacedName)
@@ -97,18 +88,15 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 	if err != nil {
 		log.Error(err, "Problem reading property template repo")
 	}
-	//
+
 	t := template.Must(template.New("properties").Parse(string(propTemplate)))
-
 	sourceConfig := instance.Spec.SourceConfig
-
 	cg := map[string]interface{}{}
 	err = yaml.Unmarshal([]byte(sourceConfig), &cg)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Source-Config: ")
-	fmt.Println(cg)
+
 	var tpl bytes.Buffer
 	t.Execute(&tpl, cg)
 
@@ -174,7 +162,6 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 	}
 	r.updateConditions(ctx, log, instance, conditionReasonUpdated, "Configmap was updated", metav1.ConditionTrue)
 	return ctrl.Result{}, nil
-
 }
 
 func newConfigMap(r *backwoodsv1.ArchimedesProperty, data map[string]string) (*corev1.ConfigMap, error) {
