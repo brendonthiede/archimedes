@@ -10,6 +10,7 @@ require (
 	github.com/onsi/gomega v1.15.0
 	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602 // indirect
 	golang.org/x/sys v0.0.0-20211116061358-0a5406a5449c // indirect
+	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/api v0.22.1
 	k8s.io/apimachinery v0.22.1
 	k8s.io/client-go v0.22.1

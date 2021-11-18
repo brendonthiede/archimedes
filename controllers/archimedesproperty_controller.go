@@ -17,32 +17,28 @@ limitations under the License.
 package controllers
 
 import (
-	//"bufio"
-	//"bytes"
+	"bufio"
+	"bytes"
 	"context"
 	"fmt"
-	//"html/template"
-	"io/ioutil"
-
-	"log"
-	"os"
-	//"strings"
-	"time"
-
-	//"gopkg.in/yaml.v2"
-	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/types"
-	ctrl "sigs.k8s.io/controller-runtime"
-	"sigs.k8s.io/controller-runtime/pkg/client"
-
 	backwoodsv1 "github.com/backwoods-devops/archimedes/api/v1"
 	git "github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-logr/logr"
+	"gopkg.in/yaml.v2"
+	"html/template"
+	"io/ioutil"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/types"
+	"os"
+	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+	"strings"
+	"time"
 )
 
 const (
@@ -80,10 +76,8 @@ type ArchimedesPropertyReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
 func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 
-	fmt.Println("Starting Reconcile Function!!!")
-	fmt.Println(req.NamespacedName)
 	log := r.Log.WithValues("archimedesproperty", req.NamespacedName)
-	fmt.Println("Next Step!!!")
+
 	instance := &backwoodsv1.ArchimedesProperty{}
 
 	err := r.Get(ctx, req.NamespacedName, instance)
@@ -97,37 +91,37 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 		// Error reading the object - requeue the request.
 		return ctrl.Result{}, err
 	}
-	/*
-		commit := gitConfig(instance.Spec.RepoUrl, instance.Spec.Revision)
-		props, err := ioutil.ReadFile("/tmp/archimedes/" + instance.Spec.PropertiesPath)
-		if err != nil {
-			log.Error(err, "Could not find property template in application repo")
-		}
-		t := template.Must(template.New("properties").Parse(string(props)))
 
-		clusterGlobalInput := instance.Spec.SourceConfig
-		log.Info(string(props))
-		cg := map[string]interface{}{}
-		err = yaml.Unmarshal([]byte(clusterGlobalInput), &cg)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("Source-Config: ")
-		fmt.Println(cg)
-		var tpl bytes.Buffer
-		t.Execute(&tpl, cg)
-	*/
+	commit, propTemplate, err := gitConfig(instance.Spec.RepoUrl, instance.Spec.Revision, instance.Spec.PropertiesPath)
+	if err != nil {
+		log.Error(err, "Problem reading property template repo")
+	}
+	//
+	t := template.Must(template.New("properties").Parse(string(propTemplate)))
+
+	sourceConfig := instance.Spec.SourceConfig
+
+	cg := map[string]interface{}{}
+	err = yaml.Unmarshal([]byte(sourceConfig), &cg)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Source-Config: ")
+	fmt.Println(cg)
+	var tpl bytes.Buffer
+	t.Execute(&tpl, cg)
+
 	var data = make(map[string]string)
-	data["commit"] = "123"
+	data["commit"] = commit
 	data["repoUrl"] = instance.Spec.RepoUrl
 	data["revision"] = instance.Spec.Revision
 	data["path"] = instance.Spec.PropertiesPath
 
-	//scanner := bufio.NewScanner(strings.NewReader(strings.TrimSpace(tpl.String())))
-	//for scanner.Scan() {
-	//	s := strings.Split(scanner.Text(), "=")
-	//	data[s[0]] = s[1]
-	//}
+	scanner := bufio.NewScanner(strings.NewReader(strings.TrimSpace(tpl.String())))
+	for scanner.Scan() {
+		s := strings.Split(scanner.Text(), "=")
+		data[s[0]] = s[1]
+	}
 	configmap, err := newConfigMap(instance, data)
 	if err != nil {
 		// Error while creating the Kubernetes configmap - requeue the request.
@@ -212,17 +206,15 @@ func (r *ArchimedesPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error 
 		Complete(r)
 }
 
-func gitConfig(url, revision string) string {
+func gitConfig(url, revision, propertiesPath string) (string, []byte, error) {
 
-	dir, err := ioutil.TempDir("tmp", "archimedes")
+	dir, err := ioutil.TempDir("/tmp", "archimedes_")
+
 	if err != nil {
-		log.Fatal(err)
+		return "", nil, err
 	}
 	defer os.RemoveAll(dir)
 
-	if err != nil {
-		fmt.Println(err)
-	}
 	//Setup different login options and skip cert if not present
 	user := os.Getenv("USER")
 	pass := os.Getenv("PASS")
@@ -245,13 +237,23 @@ func gitConfig(url, revision string) string {
 		//CABundle:          certs,
 	})
 	if err != nil {
-		fmt.Println(err)
+		return "", nil, err
 	}
 	ref, err := r.Head()
 	if err != nil {
-		fmt.Println(err)
+		return "", nil, err
 	}
+
 	commit, err := r.CommitObject(ref.Hash())
-	return commit.Hash.String()
+	if err != nil {
+		return "", nil, err
+	}
+
+	propTemplate, err := ioutil.ReadFile(dir + "/" + propertiesPath)
+	if err != nil {
+		return commit.Hash.String(), propTemplate, err
+	}
+
+	return commit.Hash.String(), propTemplate, nil
 
 }
