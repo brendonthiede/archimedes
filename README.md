@@ -45,7 +45,7 @@ Next thing needed is the ArchimedesProperty definition.
 | revision | the commit hash, branch or tag | string |
 | propertiesPath | the path to the template file | string |
 | sourceConfig | a yaml configuration file supplied by the platform/env | string |
-| propertyType | configmap data style.  Options are kvp or key.  kvp will create a separate entry for each line in the properties template.  key will place the results of the merged template as a string value under the name defined in keyName. | string |
+| propertyType | configmap data style.  Options are kvp or key.  kvp will create a separate entry for each line in the properties template (values in kvp values in template file are separated by `=`).   key will place the results of the merged template as a string value under the name defined in keyName. Use this method if you have a configuration to be consumed that is not in a kvp format. | string |
 | keyName | name of the key template results are saved to.  Only applies when propertyType is set to key | string |
 
 
