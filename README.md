@@ -55,6 +55,7 @@ apiVersion: archimedes.backwoods-devops.io/v1
 kind: ArchimedesProperty
 metadata:
   name: archimedesproperty-trees-app
+  namespace: default
 spec:
   name: trees-app-properties
   repoUrl: "https://github.com/backwoods-devops/archimedes.git"
@@ -77,6 +78,7 @@ apiVersion: archimedes.backwoods-devops.io/v1
 kind: ArchimedesProperty
 metadata:
   name: archimedesproperty-trees-app
+  namespace: default
 spec:
   name: trees-app-properties
   repoUrl: "https://github.com/backwoods-devops/archimedes.git"
