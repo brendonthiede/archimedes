@@ -93,3 +93,8 @@ spec:
   keyName: config.properties
 EOF
 ```
+## Extra properties added
+There will be several properties automatically added.
+
+commit, repoUrl, revision and path will be populated so they may be referenced as needed by your tooling to determine proper versioning
+	
