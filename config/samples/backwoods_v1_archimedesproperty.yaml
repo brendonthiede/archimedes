@@ -11,5 +11,6 @@ spec:
     env:
       name: staging
       dbname: forest-data
+      dbport: 5432
   propertyType: key
-  keyName: applicaiton-properties
+  keyName: config.properties
