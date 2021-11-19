@@ -9,13 +9,13 @@ Archimedes is designed to solve configuration issues that become difficult when 
 ## Installation
 A helm chart for deployment is supplied in the chart/archimedes-property-operator.  This chart also includes the archimedes custom resource definition.
 
-```
+```sh
 cd chart/archimedes-property-operator
 
 kubectl apply -f crd/archimedes.backwoods-devops.io_archimedesproperties.yaml
 ```
 Next steps would be to setup needed configuration and supply the credentials for your repo including a CA certificate if needed. Once that is ready you can install the operator.
-```
+```sh
 helm install archimedes-property-operator .
 ```
 ## Usuage
@@ -50,7 +50,7 @@ Next thing needed is the ArchimedesProperty definition.
 
 ### ArchimedesProperty
 
-```
+```yaml
 apiVersion: archimedes.backwoods-devops.io/v1
 kind: ArchimedesProperty
 metadata:
@@ -71,7 +71,7 @@ spec:
 
 ### Deploy your property
 
-```
+```sh
 cat <<EOF | kubectl apply -f -
 apiVersion: archimedes.backwoods-devops.io/v1
 kind: ArchimedesProperty
