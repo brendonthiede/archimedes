@@ -84,7 +84,7 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 		return ctrl.Result{}, err
 	}
 
-	commit, propTemplate, err := gitConfig(instance.Spec.RepoUrl, instance.Spec.Revision, instance.Spec.PropertiesPath, instance.Spec.CAPath)
+	commit, propTemplate, err := gitConfig(instance)
 	if err != nil {
 		log.Error(err, "Problem reading property template repo")
 	}
@@ -215,7 +215,7 @@ func gitConfig(r *backwoodsv1.ArchimedesProperty) (string, []byte, error) {
 		return "", nil, err
 	}
 	defer os.RemoveAll(dir)
-	
+
 	user := os.Getenv("USER")
 	pass := os.Getenv("PASS")
 	var certs []byte
