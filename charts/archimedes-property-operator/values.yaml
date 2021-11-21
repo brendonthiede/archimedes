@@ -48,15 +48,8 @@ securityContext: {}
 environmentVars: []
 
 archimedes:
-  address: ""
-  authMethod: token
-  tokenPath: ""
   kubernetesPath: auth/kubernetes
   kubernetesRole: archimedes-property-operator
-  appRolePath: auth/approle
-  azurePath: auth/azure
-  azureRole: default
-  reconciliationTime: 0
   namespaces: ""
 
 rbac:
