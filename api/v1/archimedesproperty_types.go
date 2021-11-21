@@ -26,11 +26,13 @@ import (
 // ArchimedesPropertySpec defines the desired state of ArchimedesProperty
 type ArchimedesPropertySpec struct {
 	//ConfigMapName is the name of the config map to be created
-	ConfigMapName string `json:"name,omitempty"`
+	ConfigMapName string `json:"configMapName,omitempty"`
 	//Repo is the application repo url
 	RepoUrl string `json:"repoUrl,omitempty"`
 	//Revision is the branch, commit hash or tag of the repo
 	Revision string `json:"revision,omitempty"`
+	//CA is the branch, commit hash or tag of the repo
+	CAPath string `json:"caPath,omitempty"`
 	//PropertiesPath is the path to the applications properties template
 	//example: config/properties.tpl
 	PropertiesPath string `json:"propertiesPath,omitempty"`

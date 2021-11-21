@@ -56,12 +56,15 @@ spec:
           spec:
             description: ArchimedesPropertySpec defines the desired state of ArchimedesProperty
             properties:
+              caPath:
+                description: CA is the branch, commit hash or tag of the repo
+                type: string
+              configMapName:
+                description: ConfigMapName is the name of the config map to be created
+                type: string
               keyName:
                 description: KeyName is the name of the key used if the PropertyType
                   is file
-                type: string
-              name:
-                description: ConfigMapName is the name of the config map to be created
                 type: string
               propertiesPath:
                 description: 'PropertiesPath is the path to the applications properties

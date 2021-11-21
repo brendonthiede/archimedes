@@ -84,7 +84,7 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 		return ctrl.Result{}, err
 	}
 
-	commit, propTemplate, err := gitConfig(instance.Spec.RepoUrl, instance.Spec.Revision, instance.Spec.PropertiesPath)
+	commit, propTemplate, err := gitConfig(instance.Spec.RepoUrl, instance.Spec.Revision, instance.Spec.PropertiesPath, instance.Spec.CAPath)
 	if err != nil {
 		log.Error(err, "Problem reading property template repo")
 	}
@@ -127,7 +127,6 @@ func (r *ArchimedesPropertyReconciler) Reconcile(ctx context.Context, req ctrl.R
 
 	configmap, err := newConfigMap(instance, data)
 	if err != nil {
-		// Error while creating the Kubernetes configmap - requeue the request.
 		log.Error(err, "Could not create Kubernetes configmap")
 		r.updateConditions(ctx, log, instance, conditionReasonCreateFailed, err.Error(), metav1.ConditionFalse)
 		return ctrl.Result{}, err
@@ -178,7 +177,7 @@ func newConfigMap(r *backwoodsv1.ArchimedesProperty, data map[string]string) (*c
 
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:        r.Name,
+			Name:        r.Spec.ConfigMapName,
 			Namespace:   r.Namespace,
 			Labels:      labels,
 			Annotations: annotations,
@@ -209,50 +208,50 @@ func (r *ArchimedesPropertyReconciler) SetupWithManager(mgr ctrl.Manager) error 
 		Complete(r)
 }
 
-func gitConfig(url, revision, propertiesPath string) (string, []byte, error) {
+func gitConfig(r *backwoodsv1.ArchimedesProperty) (string, []byte, error) {
 
 	dir, err := ioutil.TempDir("/tmp", "archimedes_")
-
 	if err != nil {
 		return "", nil, err
 	}
 	defer os.RemoveAll(dir)
-
-	//Setup different login options and skip cert if not present
+	
 	user := os.Getenv("USER")
 	pass := os.Getenv("PASS")
-	//var certs []byte
-	//TODO check if exists first
+	var certs []byte
 
-	//certs, err = ioutil.ReadFile("/etc/archimedes-property-operator/ca.crt")
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	r, err := git.PlainClone(dir, false, &git.CloneOptions{
-		URL: url,
+	if _, err := os.Stat(r.Spec.CAPath); err == nil {
+		certs, err = ioutil.ReadFile(r.Spec.CAPath)
+		if err != nil {
+			return "", nil, err
+		}
+	}
+
+	repo, err := git.PlainClone(dir, false, &git.CloneOptions{
+		URL: r.Spec.RepoUrl,
 		Auth: &http.BasicAuth{
 			Username: user,
 			Password: pass,
 		},
-		ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", revision)),
+		ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", r.Spec.Revision)),
 		SingleBranch:      true,
 		RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
-		//CABundle:          certs,
+		CABundle:          certs,
 	})
 	if err != nil {
 		return "", nil, err
 	}
-	ref, err := r.Head()
+	ref, err := repo.Head()
 	if err != nil {
 		return "", nil, err
 	}
 
-	commit, err := r.CommitObject(ref.Hash())
+	commit, err := repo.CommitObject(ref.Hash())
 	if err != nil {
 		return "", nil, err
 	}
 
-	propTemplate, err := ioutil.ReadFile(dir + "/" + propertiesPath)
+	propTemplate, err := ioutil.ReadFile(dir + "/" + r.Spec.PropertiesPath)
 	if err != nil {
 		return commit.Hash.String(), propTemplate, err
 	}

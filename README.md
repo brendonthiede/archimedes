@@ -21,7 +21,7 @@ helm install archimedes-property-operator .
 ```
 ## Usuage
 
-To deploy a property 2 things are needed.  First item is a template file that will be stored in with the application repo.  This template will be parsed using the [golang text/template package](https://pkg.go.dev/text/template "text/template package")  A key value pair pattern is used to define the individual properties and values from a supplied sourceConfig in the ArchimedesProperty definition can be referenced as well as any of the features available in the text/template package.  This allows developers to place logic if needed to enhance flexibility.  
+To deploy an Archimedes property you will need an application property template along with a Archimedes property  definition.  The properties template file will be stored in with the application repo or any repo desired.  This template will be parsed using the [golang text/template package](https://pkg.go.dev/text/template "text/template package").  A key value pair pattern is used with the = to separate the key and the value to define the individual properties.   Data to be merged is suppied from the sourceConfig in the ArchimedesProperty definition. There are two options for how this template is parsed into the configMap that will be generated.  The propertyType in the Archimedes proterty spec (details below) allows for either individual key values to be parsed into separate values (kpv option and values in template separated by =) or the final merged template to be setup under a defined key value (file option with keyName property defined).  The file option opens the door for any configuration format to be merged with the sourceConfig. 
 ### Application Property Template
 
 ```
@@ -43,9 +43,10 @@ Next thing needed is the ArchimedesProperty definition.
 | name | name of the configmap to be created | string |
 | repoURL | url to the repo containing the property template to be merged | string |
 | revision | the commit hash, branch or tag | string |
+| caPath | path to CA Certificate for git repo to use if required | string |
 | propertiesPath | the path to the template file | string |
 | sourceConfig | a yaml configuration file supplied by the platform/env | string |
-| propertyType | configmap data style.  Options are kvp or key.  kvp will create a separate entry for each line in the properties template (values in kvp values in template file are separated by `=`).   key will place the results of the merged template as a string value under the name defined in keyName. Use this method if you have a configuration to be consumed that is not in a kvp format. | string |
+| propertyType | configmap data style.  Options are kvp or key.  kvp will create a separate entry for each line in the properties template (values in kvp values in template file are separated by = ).   key will place the results of the merged template as a string value under the name defined in keyName. Use this method if you have a configuration to be consumed that is not in a kvp format. | string |
 | keyName | name of the key template results are saved to.  Only applies when propertyType is set to key | string |
 
 

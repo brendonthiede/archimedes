@@ -14,7 +14,7 @@ volumes: []
   #   secret:
   #     secretName: archimedes-property-operator-ca
   #     items:
-  #       - key: ca.pem
+  #       - key: ca
   #         path: ca.pem
 
 
