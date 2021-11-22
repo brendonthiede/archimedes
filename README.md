@@ -27,7 +27,7 @@ To deploy an Archimedes property you will need an application property template 
 ```
 databaseName={{ .env.dbanme }}
 databasePort={{ .env.dbport }}
-{{- if ne .env.name "Production"}}
+{{- if eq .env.name "Production"}}
 templateCache=true
 {{- else}}
 templateCache=false
