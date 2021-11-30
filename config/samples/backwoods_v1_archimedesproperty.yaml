@@ -3,7 +3,7 @@ kind: ArchimedesProperty
 metadata:
   name: archimedesproperty-sample
 spec:
-  name: ap
+  configMapName: app-properties
   repoUrl: "https://github.com/backwoods-devops/archimedes.git"
   revision: main
   propertiesPath: config/samples/properties.tpl

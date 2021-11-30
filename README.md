@@ -59,7 +59,7 @@ metadata:
   name: archimedesproperty-trees-app
   namespace: default
 spec:
-  name: trees-app-properties
+  configMapName: trees-app-properties
   repoUrl: "https://github.com/backwoods-devops/archimedes.git"
   revision: main
   propertiesPath: config/samples/properties.tpl
@@ -82,7 +82,7 @@ metadata:
   name: archimedesproperty-trees-app
   namespace: default
 spec:
-  name: trees-app-properties
+  configMapName: trees-app-properties
   repoUrl: "https://github.com/backwoods-devops/archimedes.git"
   revision: main
   propertiesPath: config/samples/properties.tpl

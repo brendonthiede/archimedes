@@ -1,4 +1,3 @@
-{{ if and .Values.rbac.create (eq .Values.archimedes.authMethod "kubernetes") }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -14,4 +13,4 @@ subjects:
     kind: ServiceAccount
     name: {{ template "archimedes-property-operator.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
-{{ end }}
+
